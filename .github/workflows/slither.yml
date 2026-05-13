@@ -1,0 +1,26 @@
+name: Slither Security Analysis
+on:
+  push:
+    branches: [main]
+jobs: 
+  slither-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Slither
+        run: |
+          pip install slither-analyzer
+
+      - name: Run Slither analysis
+        run: |
+          slither . \
+          --json slither-report.json \
+          --fail-high
+
+      - name: Upload Slither report
+        uses: actions/upload-artifact@v2
+        with:
+          name: slither-report
+          path: slither-report.json
